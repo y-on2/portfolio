@@ -1,4 +1,4 @@
-# Cybersecurity Portfolio
+# My Portfolio
 
 ## Overview
 This repository serves as a professional portfolio documenting technical competencies, project experience, and academic development within the cybersecurity domain. The curated content demonstrates a systematic approach to solving real-world security challenges through methodical analysis, defensive engineering, and structured incident response.
