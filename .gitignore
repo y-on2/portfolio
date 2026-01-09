@@ -27,3 +27,8 @@ dist-ssr
 
 # vscode
 .vscode
+# Build output
+build/
+vite.fix.js
+vite.config.build.js
+vite.temp.js
