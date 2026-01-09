@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
 import { motion } from "framer-motion";
-import emailjs from "@emailjs/browser";
+// Remove EmailJS import, add Firebase imports
+import { addDoc, collection, db, serverTimestamp } from "../firebase";
 
 import { styles } from "../styles";
 import { EarthCanvas } from "./canvas";
@@ -27,41 +28,35 @@ const Contact = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
-    emailjs
-      .send(
-        import.meta.env.VITE_APP_EMAILJS_SERVICE_ID,
-        import.meta.env.VITE_APP_EMAILJS_TEMPLATE_ID,
-        {
-          from_name: form.name,
-          to_name: "JavaScript Mastery",
-          from_email: form.email,
-          to_email: "sujata@jsmastery.pro",
-          message: form.message,
-        },
-        import.meta.env.VITE_APP_EMAILJS_PUBLIC_KEY
-      )
-      .then(
-        () => {
-          setLoading(false);
-          alert("Thank you. I will get back to you as soon as possible.");
+    try {
+      // Save to Firebase Firestore
+      await addDoc(collection(db, "contacts"), {
+        name: form.name,
+        email: form.email,
+        message: form.message,
+        timestamp: serverTimestamp(), // Server-side timestamp
+        createdAt: new Date().toISOString(), // Client-side timestamp
+        status: "new" // To track message status
+      });
 
-          setForm({
-            name: "",
-            email: "",
-            message: "",
-          });
-        },
-        (error) => {
-          setLoading(false);
-          console.error(error);
+      setLoading(false);
+      alert("Thank you! Your message has been saved. I will get back to you soon.");
 
-          alert("Ahh, something went wrong. Please try again.");
-        }
-      );
+      // Reset form
+      setForm({
+        name: "",
+        email: "",
+        message: "",
+      });
+    } catch (error) {
+      setLoading(false);
+      console.error("Error saving message to Firebase: ", error);
+      alert("Sorry, something went wrong. Please try again.");
+    }
   };
 
   return (
@@ -88,6 +83,7 @@ const Contact = () => {
               onChange={handleChange}
               placeholder="Your Name"
               className='bg-tertiary py-4 px-6 placeholder:text-secondary text-white rounded-lg outline-none border-none font-medium'
+              required
             />
           </label>
           <label className='flex flex-col'>
@@ -98,6 +94,7 @@ const Contact = () => {
               onChange={handleChange}
               placeholder="Your Email"
               className='bg-tertiary py-4 px-6 placeholder:text-secondary text-white rounded-lg outline-none border-none font-medium'
+              required
             />
           </label>
           <label className='flex flex-col'>
@@ -108,14 +105,16 @@ const Contact = () => {
               onChange={handleChange}
               placeholder='An honor to write your message.'
               className='bg-tertiary py-4 px-6 placeholder:text-secondary text-white rounded-lg outline-none border-none font-medium'
+              required
             />
           </label>
 
           <button
             type='submit'
             className='bg-tertiary py-3 px-8 rounded-xl outline-none w-fit text-white font-bold shadow-md shadow-primary'
+            disabled={loading}
           >
-            {loading ? "Sending..." : "Send"}
+            {loading ? "Saving..." : "Send"}
           </button>
         </form>
       </motion.div>
