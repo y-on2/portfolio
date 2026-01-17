@@ -30,6 +30,6 @@ The projects within this portfolio highlight practical experience in the followi
 ## Contact Information
 For professional inquiries or technical collaboration:
 
-* **LinkedIn**: [ezz-aldeen-alshalfi](https://www.linkedin.com/in/ezz-aldeen-alshalfi)
+* **LinkedIn**: [ezz-aldeen-alshalfi](https://www.linkedin.com/in/ezz-aldeen-alshalfi-905538256/)
 * **X (Twitter)**: [y_on_2](https://x.com/y_on_2)
 * **Instagram**: [y_on.2](https://www.instagram.com/y_on.2)

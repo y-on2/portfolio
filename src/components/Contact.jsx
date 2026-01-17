@@ -1,12 +1,16 @@
-import React, { useRef, useState } from "react";
 import { motion } from "framer-motion";
+import React, { useRef, useState } from "react";
 // Remove EmailJS import, add Firebase imports
 import { addDoc, collection, db, serverTimestamp } from "../firebase";
 
-import { styles } from "../styles";
-import { EarthCanvas } from "./canvas";
+// 1. IMPORT ICONS HERE
+import { FaInstagram, FaLinkedin } from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";
+
 import { SectionWrapper } from "../hoc";
+import { styles } from "../styles";
 import { slideIn } from "../utils/motion";
+import { EarthCanvas } from "./canvas";
 
 const Contact = () => {
   const formRef = useRef();
@@ -59,6 +63,25 @@ const Contact = () => {
     }
   };
 
+  // Social Media Links Configuration
+  const socialLinks = [
+    {
+      id: "linkedin",
+      icon: <FaLinkedin />,
+      url: "https://www.linkedin.com/in/ezz-aldeen-alshalfi-905538256/", // REPLACE WITH YOUR URL
+    },
+    {
+      id: "twitter",
+      icon: <FaXTwitter />, // Note: Using standard FA icon. Update import to FaXTwitter from 'react-icons/fa6' if you have the latest version
+      url: "https://x.com/y_on_2", // REPLACE WITH YOUR URL
+    },
+    {
+      id: "instagram",
+      icon: <FaInstagram />,
+      url: "https://www.instagram.com/y_on.2", // REPLACE WITH YOUR URL
+    },
+  ];
+
   return (
     <div
       className={`xl:mt-12 flex xl:flex-row flex-col-reverse gap-10 overflow-hidden`}
@@ -109,13 +132,36 @@ const Contact = () => {
             />
           </label>
 
-          <button
-            type='submit'
-            className='bg-tertiary py-3 px-8 rounded-xl outline-none w-fit text-white font-bold shadow-md shadow-primary'
-            disabled={loading}
-          >
-            {loading ? "Saving..." : "Send"}
-          </button>
+          {/* WRAPPER FOR BUTTON AND SOCIAL ICONS */}
+          <div className="flex flex-row items-center justify-between">
+            
+            <button
+              type='submit'
+              className='bg-tertiary py-3 px-8 rounded-xl outline-none w-fit text-white font-bold shadow-md shadow-primary'
+              disabled={loading}
+            >
+              {loading ? "Saving..." : "Send"}
+            </button>
+
+            {/* SOCIAL MEDIA ICONS CONTAINER */}
+            <div className="flex gap-4">
+              {socialLinks.map((social) => (
+                <motion.a
+                  key={social.id}
+                  href={social.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-white text-[24px]"
+                  whileHover={{ scale: 1.2, color: "#915eff" }} // Scale up and change color on hover
+                  whileTap={{ scale: 0.9 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                >
+                  {social.icon}
+                </motion.a>
+              ))}
+            </div>
+
+          </div>
         </form>
       </motion.div>
 
